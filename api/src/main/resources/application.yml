@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://db.routewings.com:5432/routewings
+    username: postgres
+    password: password
+
+server:
+  port: 80
