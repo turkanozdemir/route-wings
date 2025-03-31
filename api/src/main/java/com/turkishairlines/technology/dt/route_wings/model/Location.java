@@ -1,6 +1,7 @@
 package com.turkishairlines.technology.dt.route_wings.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -26,6 +27,7 @@ public class Location {
     @Column(nullable = false)
     private String city;
 
-    @Column(nullable = false, unique = true)
+    @Size(min = 3, max = 3, message = "Location code must be exactly 3 characters")
+    @Column(nullable = false)
     private String locationCode;
 }
