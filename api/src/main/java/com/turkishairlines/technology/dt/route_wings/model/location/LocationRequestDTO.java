@@ -1,21 +1,16 @@
 package com.turkishairlines.technology.dt.route_wings.model.location;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "locations", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Location {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class LocationRequestDTO {
     @NotBlank
     private String name;
 
