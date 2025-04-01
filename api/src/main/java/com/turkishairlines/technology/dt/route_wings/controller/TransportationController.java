@@ -1,7 +1,7 @@
 package com.turkishairlines.technology.dt.route_wings.controller;
 
 import com.turkishairlines.technology.dt.route_wings.constant.TransportationConstants;
-import com.turkishairlines.technology.dt.route_wings.model.Transportation;
+import com.turkishairlines.technology.dt.route_wings.model.transportation.Transportation;
 import com.turkishairlines.technology.dt.route_wings.service.TransportationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

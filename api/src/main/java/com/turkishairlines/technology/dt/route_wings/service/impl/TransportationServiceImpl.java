@@ -2,7 +2,7 @@ package com.turkishairlines.technology.dt.route_wings.service.impl;
 
 import com.turkishairlines.technology.dt.route_wings.constant.TransportationConstants;
 import com.turkishairlines.technology.dt.route_wings.exception.NotFoundException;
-import com.turkishairlines.technology.dt.route_wings.model.Transportation;
+import com.turkishairlines.technology.dt.route_wings.model.transportation.Transportation;
 import com.turkishairlines.technology.dt.route_wings.repository.TransportationRepository;
 import com.turkishairlines.technology.dt.route_wings.service.TransportationService;
 import jakarta.transaction.Transactional;

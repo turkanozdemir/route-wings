@@ -1,6 +1,6 @@
 package com.turkishairlines.technology.dt.route_wings.service;
 
-import com.turkishairlines.technology.dt.route_wings.model.Location;
+import com.turkishairlines.technology.dt.route_wings.model.location.Location;
 
 import java.util.List;
 

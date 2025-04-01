@@ -1,5 +1,6 @@
-package com.turkishairlines.technology.dt.route_wings.model;
+package com.turkishairlines.technology.dt.route_wings.model.transportation;
 
+import com.turkishairlines.technology.dt.route_wings.model.location.Location;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

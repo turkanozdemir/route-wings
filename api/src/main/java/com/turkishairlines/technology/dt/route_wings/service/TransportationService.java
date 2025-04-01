@@ -1,6 +1,6 @@
 package com.turkishairlines.technology.dt.route_wings.service;
 
-import com.turkishairlines.technology.dt.route_wings.model.Transportation;
+import com.turkishairlines.technology.dt.route_wings.model.transportation.Transportation;
 
 import java.time.LocalDate;
 import java.util.List;

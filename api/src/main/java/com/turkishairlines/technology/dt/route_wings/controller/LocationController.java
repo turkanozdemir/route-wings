@@ -1,6 +1,6 @@
 package com.turkishairlines.technology.dt.route_wings.controller;
 
-import com.turkishairlines.technology.dt.route_wings.model.Location;
+import com.turkishairlines.technology.dt.route_wings.model.location.Location;
 import com.turkishairlines.technology.dt.route_wings.service.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +57,5 @@ public class LocationController {
     public ResponseEntity<Void> deleteLocation(@PathVariable Long id) {
         locationService.deleteLocationById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
     }
 }

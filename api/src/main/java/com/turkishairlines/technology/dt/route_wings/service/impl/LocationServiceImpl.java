@@ -3,7 +3,7 @@ package com.turkishairlines.technology.dt.route_wings.service.impl;
 import com.turkishairlines.technology.dt.route_wings.constant.LocationConstants;
 import com.turkishairlines.technology.dt.route_wings.exception.AlreadyExistsException;
 import com.turkishairlines.technology.dt.route_wings.exception.NotFoundException;
-import com.turkishairlines.technology.dt.route_wings.model.Location;
+import com.turkishairlines.technology.dt.route_wings.model.location.Location;
 import com.turkishairlines.technology.dt.route_wings.repository.LocationRepository;
 import com.turkishairlines.technology.dt.route_wings.service.LocationService;
 import jakarta.transaction.Transactional;
