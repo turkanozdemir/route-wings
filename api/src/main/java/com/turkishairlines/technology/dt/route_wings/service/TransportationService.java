@@ -1,20 +1,21 @@
 package com.turkishairlines.technology.dt.route_wings.service;
 
-import com.turkishairlines.technology.dt.route_wings.model.transportation.Transportation;
+import com.turkishairlines.technology.dt.route_wings.model.transportation.TransportationRequestDTO;
+import com.turkishairlines.technology.dt.route_wings.model.transportation.TransportationResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface TransportationService {
-    List<Transportation> getAllTransportations();
+    List<TransportationResponseDTO> getAllTransportations();
 
-    Transportation getTransportationById(Long id);
+    TransportationResponseDTO getTransportationById(Long id);
 
-    Transportation saveTransportation(Transportation transportation);
+    TransportationResponseDTO saveTransportation(TransportationRequestDTO transportation);
 
-    Transportation updateTransportation(Transportation transportation);
+    TransportationResponseDTO updateTransportation(Long id, TransportationRequestDTO transportation);
 
     void deleteTransportation(Long id);
 
-    boolean isTransportationAvailableOnDate(Transportation transportation, LocalDate date);
+    boolean isTransportationAvailableOnDate(Long id, LocalDate date);
 }
