@@ -1,17 +1,20 @@
 package com.turkishairlines.technology.dt.route_wings.service;
 
-import com.turkishairlines.technology.dt.route_wings.model.location.Location;
+import com.turkishairlines.technology.dt.route_wings.model.location.LocationRequestDTO;
+import com.turkishairlines.technology.dt.route_wings.model.location.LocationResponseDTO;
 
 import java.util.List;
 
 public interface LocationService {
-    List<Location> getAllLocations();
+    List<LocationResponseDTO> getAllLocations();
 
-    Location getLocationById(Long id);
+    LocationResponseDTO getLocationById(Long id);
 
-    Location getLocationByName(String name);
+    LocationResponseDTO getLocationByName(String name);
 
-    Location saveLocation(Location location);
+    LocationResponseDTO saveLocation(LocationRequestDTO requestDTO);
+
+    LocationResponseDTO updateLocation(Long id, LocationRequestDTO requestDTO);
 
     void deleteLocationById(Long id);
 }

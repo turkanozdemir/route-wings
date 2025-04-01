@@ -3,42 +3,66 @@ package com.turkishairlines.technology.dt.route_wings.service.impl;
 import com.turkishairlines.technology.dt.route_wings.constant.LocationConstants;
 import com.turkishairlines.technology.dt.route_wings.exception.AlreadyExistsException;
 import com.turkishairlines.technology.dt.route_wings.exception.NotFoundException;
+import com.turkishairlines.technology.dt.route_wings.mapper.LocationMapper;
 import com.turkishairlines.technology.dt.route_wings.model.location.Location;
+import com.turkishairlines.technology.dt.route_wings.model.location.LocationRequestDTO;
+import com.turkishairlines.technology.dt.route_wings.model.location.LocationResponseDTO;
 import com.turkishairlines.technology.dt.route_wings.repository.LocationRepository;
 import com.turkishairlines.technology.dt.route_wings.service.LocationService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class LocationServiceImpl implements LocationService {
-    @Autowired
-    private LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
     @Override
-    public List<Location> getAllLocations() {
-        return locationRepository.findAll();
+    public List<LocationResponseDTO> getAllLocations() {
+        return locationRepository.findAll().stream()
+                .map(LocationMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Location getLocationById(Long id) {
-        return locationRepository.findById(id).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
+    public LocationResponseDTO getLocationById(Long id) {
+        Location location = locationRepository.findById(id).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
+        return LocationMapper.toResponseDTO(location);
     }
 
     @Override
-    public Location getLocationByName(String name) {
-        return locationRepository.findByName(name).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, name));
+    public LocationResponseDTO getLocationByName(String name) {
+        Location location = locationRepository.findByName(name).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, name));
+        return LocationMapper.toResponseDTO(location);
     }
 
     @Override
-    public Location saveLocation(Location location) {
-        if (locationRepository.findByName(location.getName()).isPresent()) {
-            throw new AlreadyExistsException(LocationConstants.LOCATION, LocationConstants.NAME, location.getName());
+    public LocationResponseDTO saveLocation(LocationRequestDTO requestDTO) {
+        // TODO: IATA Control will be added
+        if (locationRepository.findByName(requestDTO.getName()).isPresent()) {
+            throw new AlreadyExistsException(LocationConstants.LOCATION, LocationConstants.NAME, requestDTO.getName());
         }
-        return locationRepository.save(location);
+
+        Location location = locationRepository.save(LocationMapper.toEntity(requestDTO));
+        return LocationMapper.toResponseDTO(location);
+    }
+
+    @Override
+    public LocationResponseDTO updateLocation(Long id, LocationRequestDTO requestDTO) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
+
+        if (requestDTO.getName() != null) location.setName(requestDTO.getName());
+        if (requestDTO.getCity() != null) location.setCity(requestDTO.getCity());
+        if (requestDTO.getCountry() != null) location.setCountry(requestDTO.getCountry());
+        if (requestDTO.getLocationCode() != null) location.setLocationCode(requestDTO.getLocationCode());
+
+        return LocationMapper.toResponseDTO(locationRepository.save(location));
     }
 
     @Override
