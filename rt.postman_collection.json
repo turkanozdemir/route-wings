@@ -1,0 +1,368 @@
+{
+	"info": {
+		"_postman_id": "858156c4-4669-48fe-8f3c-c45a4dcea2e3",
+		"name": "ROUTE WINGS APP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34793330"
+	},
+	"item": [
+		{
+			"name": "Location",
+			"item": [
+				{
+					"name": "Get All Locations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/locations",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Location By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/locations/1",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"locations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Location By Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/locations?name=London Heathrow Airport",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"locations"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "London Heathrow Airport"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Location",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"London Heathrow Airport\",\r\n    \"country\": \"United Kingdom\",\r\n    \"city\": \"London\",\r\n    \"locationCode\": \"LHR\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://app.routewings.com:8000/locations/1",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"locations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Wembley Stadium\",\r\n    \"country\": \"United Kingdom\",\r\n    \"city\": \"London\",\r\n    \"locationCode\": \"WBLYSTDM\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://app.routewings.com:8000/locations",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Location",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/locations/2",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"locations",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transportation",
+			"item": [
+				{
+					"name": "Get All Transportations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/transportations",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"transportations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Transportation By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/transportations/1",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"transportations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Transportation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"originId\": 1,\r\n  \"destinationId\": 3,\r\n  \"transportationType\": \"UBER\",\r\n  \"operatingDays\": [1, 3, 5]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://app.routewings.com:8000/transportations",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"transportations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Transportation",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"originId\": 1,\r\n  \"destinationId\": 1,\r\n  \"transportationType\": \"BUS\",\r\n  \"operatingDays\": [1, 4, 5]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://app.routewings.com:8000/transportations/1",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"transportations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Transportation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/transportations/2",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"transportations",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Is Transportation Available On Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/transportations/1/availability?date=2025-04-09",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"transportations",
+								"1",
+								"availability"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2025-04-09"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Route",
+			"item": [
+				{
+					"name": "Get Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://app.routewings.com:8000/routes?origin=TKSMSQR&destination=WBLYSTDM&date=2025-04-02",
+							"protocol": "http",
+							"host": [
+								"app",
+								"routewings",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"routes"
+							],
+							"query": [
+								{
+									"key": "origin",
+									"value": "TKSMSQR"
+								},
+								{
+									"key": "destination",
+									"value": "WBLYSTDM"
+								},
+								{
+									"key": "date",
+									"value": "2025-04-02"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
