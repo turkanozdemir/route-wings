@@ -1,0 +1,25 @@
+# node_modules zaten image içinde yeniden kurulur
+node_modules/
+
+# build output
+dist/
+build/
+
+# IDE klasörleri
+.idea
+*.iml
+
+# Git
+.git
+.gitignore
+
+# OS dosyaları
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env
+.env
+.env.local
