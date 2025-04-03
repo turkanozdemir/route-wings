@@ -35,13 +35,13 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationResponseDTO getLocationById(Long id) {
-        Location location = locationRepository.findById(id).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
+        Location location = locationRepository.findById(id).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, LocationConstants.ID, id));
         return LocationMapper.toResponseDTO(location);
     }
 
     @Override
     public LocationResponseDTO getLocationByName(String name) {
-        Location location = locationRepository.findByName(name).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, name));
+        Location location = locationRepository.findByName(name).orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, LocationConstants.NAME, name));
         return LocationMapper.toResponseDTO(location);
     }
 
@@ -59,7 +59,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationResponseDTO updateLocation(Long id, LocationRequestDTO requestDTO) {
         Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
+                .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, LocationConstants.ID, id));
 
         if (requestDTO.getName() != null) {
             Optional<Location> existingLocation = locationRepository.findByName(requestDTO.getName());
@@ -80,7 +80,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void deleteLocationById(Long id) {
         if (!locationRepository.existsById(id)) {
-            throw new NotFoundException(LocationConstants.LOCATION, id);
+            throw new NotFoundException(LocationConstants.LOCATION, LocationConstants.ID, id);
         }
 
         if (transportationService.isLocationUsed(getLocationEntityById(id))) {
@@ -90,8 +90,15 @@ public class LocationServiceImpl implements LocationService {
         locationRepository.deleteById(id);
     }
 
+    @Override
     public Location getLocationEntityById(Long id) {
         return locationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
+                .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, LocationConstants.ID, id));
+    }
+
+    @Override
+    public Location getByLocationCode(String locationCode) {
+        return locationRepository.findByLocationCode(locationCode)
+                .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, LocationConstants.LOCATION_CODE, locationCode));
     }
 }

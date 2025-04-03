@@ -21,4 +21,6 @@ public interface LocationService {
     void deleteLocationById(Long id);
 
     Location getLocationEntityById(@NotNull Long originId);
+
+    Location getByLocationCode(String locationCode);
 }

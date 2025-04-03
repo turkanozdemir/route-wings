@@ -38,8 +38,13 @@ public class TransportationServiceImpl implements TransportationService {
     }
 
     @Override
+    public List<Transportation> getAllByOriginLocation(Location origin) {
+        return transportationRepository.findAllByOriginLocation(origin);
+    }
+
+    @Override
     public TransportationResponseDTO getTransportationById(Long id) {
-        Transportation transportation = transportationRepository.findById(id).orElseThrow(() -> new NotFoundException(TransportationConstants.TRANSPORTATION, id));
+        Transportation transportation = transportationRepository.findById(id).orElseThrow(() -> new NotFoundException(TransportationConstants.TRANSPORTATION, TransportationConstants.ID, id));
         return TransportationMapper.toResponseDTO(transportation);
     }
 
@@ -67,7 +72,7 @@ public class TransportationServiceImpl implements TransportationService {
     @Override
     public TransportationResponseDTO updateTransportation(Long id, TransportationRequestDTO requestDTO) {
         Transportation updatedTransportation = transportationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(TransportationConstants.TRANSPORTATION, id));
+                .orElseThrow(() -> new NotFoundException(TransportationConstants.TRANSPORTATION, TransportationConstants.ID, id));
 
         Location origin = locationService.getLocationEntityById(requestDTO.getOriginId());
         Location destination = locationService.getLocationEntityById(requestDTO.getDestinationId());
@@ -108,7 +113,7 @@ public class TransportationServiceImpl implements TransportationService {
     @Override
     public void deleteTransportation(Long id) {
         if (!transportationRepository.existsById(id)) {
-            throw new NotFoundException(TransportationConstants.TRANSPORTATION, id);
+            throw new NotFoundException(TransportationConstants.TRANSPORTATION, TransportationConstants.ID, id);
         }
         transportationRepository.deleteById(id);
     }
@@ -117,7 +122,7 @@ public class TransportationServiceImpl implements TransportationService {
     public boolean isTransportationAvailableOnDate(Long id, LocalDate date) {
         int dayOfWeek = date.getDayOfWeek().getValue();
         Transportation transportation = transportationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(TransportationConstants.TRANSPORTATION, id));
+                .orElseThrow(() -> new NotFoundException(TransportationConstants.TRANSPORTATION, TransportationConstants.ID, id));
         return transportation.getOperatingDays().contains(dayOfWeek);
     }
 

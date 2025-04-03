@@ -5,8 +5,7 @@ import com.turkishairlines.technology.dt.route_wings.model.location.Location;
 import com.turkishairlines.technology.dt.route_wings.model.route.RouteDTO;
 import com.turkishairlines.technology.dt.route_wings.model.transportation.Transportation;
 import com.turkishairlines.technology.dt.route_wings.model.transportation.TransportationType;
-import com.turkishairlines.technology.dt.route_wings.repository.LocationRepository;
-import com.turkishairlines.technology.dt.route_wings.repository.TransportationRepository;
+import com.turkishairlines.technology.dt.route_wings.service.LocationService;
 import com.turkishairlines.technology.dt.route_wings.service.RouteService;
 import com.turkishairlines.technology.dt.route_wings.service.TransportationService;
 import lombok.RequiredArgsConstructor;
@@ -20,20 +19,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RouteServiceImpl implements RouteService {
-    private final LocationRepository locationRepository;
-    private final TransportationRepository transportationRepository;
-    private final TransportationService transportationService; // Yeni eklenen dependency
+    private static final int MAX_ROUTE_DEPTH = 3;
 
+    private final LocationService locationService;
+    private final TransportationService transportationService;
+
+    @Override
     public List<RouteDTO> findValidRoutes(String originCode, String destinationCode, LocalDate date) {
-        Location origin = locationRepository.findByLocationCode(originCode)
-                .orElseThrow(() -> new IllegalArgumentException("Origin not found"));
-        Location destination = locationRepository.findByLocationCode(destinationCode)
-                .orElseThrow(() -> new IllegalArgumentException("Destination not found"));
+        Location origin = locationService.getByLocationCode(originCode);
+        Location destination = locationService.getByLocationCode(destinationCode);
 
         List<List<Transportation>> allPossibleRoutes = new ArrayList<>();
         Set<Transportation> visitedTransportations = new HashSet<>();
@@ -43,27 +41,26 @@ public class RouteServiceImpl implements RouteService {
         return allPossibleRoutes.stream()
                 .filter(this::isValidRoute)
                 .filter(route -> date == null || isRouteAvailableOnDate(route, date))
-                .map(route -> RouteDTO.builder()
-                        .steps(route.stream()
-                                .map(TransportationMapper::toResponseDTO)
-                                .collect(Collectors.toList()))
-                        .build())
+                .map(this::convertToRouteDTO)
                 .collect(Collectors.toList());
     }
 
     private void dfs(Location currentLocation, Location destinationLocation, List<Transportation> currentPath,
                      List<List<Transportation>> foundRoutes, Set<Transportation> visitedTransportations, int depth) {
-        if (depth >= 3) return;
 
-        for (Transportation transportation : transportationRepository.findAllByOriginLocation(currentLocation)) {
+        if (depth >= MAX_ROUTE_DEPTH) return;
+
+        for (Transportation transportation : transportationService.getAllByOriginLocation(currentLocation)) {
             if (visitedTransportations.contains(transportation)) continue;
+
             visitedTransportations.add(transportation);
             currentPath.add(transportation);
 
             if (transportation.getDestinationLocation().equals(destinationLocation)) {
                 foundRoutes.add(new ArrayList<>(currentPath));
             } else {
-                dfs(transportation.getDestinationLocation(), destinationLocation, currentPath, foundRoutes, visitedTransportations, depth + 1);
+                dfs(transportation.getDestinationLocation(), destinationLocation,
+                        currentPath, foundRoutes, visitedTransportations, depth + 1);
             }
 
             currentPath.remove(currentPath.size() - 1);
@@ -73,27 +70,41 @@ public class RouteServiceImpl implements RouteService {
 
     private boolean isRouteAvailableOnDate(List<Transportation> route, LocalDate date) {
         return route.stream()
-                .allMatch(transportation -> transportationService.isTransportationAvailableOnDate(transportation.getId(), date));
+                .allMatch(transportation -> transportationService
+                        .isTransportationAvailableOnDate(transportation.getId(), date));
+    }
+
+    private RouteDTO convertToRouteDTO(List<Transportation> route) {
+        return RouteDTO.builder()
+                .steps(route.stream()
+                        .map(TransportationMapper::toResponseDTO)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     private boolean isValidRoute(List<Transportation> route) {
-        long flightCount = route.stream().filter(transportation -> transportation.getTransportationType() == TransportationType.FLIGHT).count();
-        if (flightCount != 1 || route.size() > 3) return false;
+        return containsExactlyOneFlight(route) && hasAtMostOneNonFlightBeforeAndAfter(route);
+    }
 
-        List<Transportation> transportsBeforeFlight = new ArrayList<>();
-        List<Transportation> transportsAfterFlight = new ArrayList<>();
+    private boolean containsExactlyOneFlight(List<Transportation> route) {
+        return route.stream()
+                .filter(t -> t.getTransportationType() == TransportationType.FLIGHT)
+                .count() == 1;
+    }
+
+    private boolean hasAtMostOneNonFlightBeforeAndAfter(List<Transportation> route) {
+        int before = 0, after = 0;
         boolean flightFound = false;
 
-        for (Transportation transportation : route) {
-            if (transportation.getTransportationType() == TransportationType.FLIGHT) {
+        for (Transportation t : route) {
+            if (t.getTransportationType() == TransportationType.FLIGHT) {
                 if (flightFound) return false;
                 flightFound = true;
             } else {
-                if (!flightFound) transportsBeforeFlight.add(transportation);
-                else transportsAfterFlight.add(transportation);
+                if (!flightFound) before++;
+                else after++;
             }
         }
-
-        return transportsBeforeFlight.size() <= 1 && transportsAfterFlight.size() <= 1;
+        return before <= 1 && after <= 1;
     }
 }
