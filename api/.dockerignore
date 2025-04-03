@@ -1,0 +1,22 @@
+# IDE klasörleri
+.idea
+*.iml
+
+# Gradle cache ve build output
+.gradle
+build/
+out/
+
+# Git
+.git
+.gitignore
+
+# OS dosyaları
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env dosyaları (gizli bilgiler olabilir)
+.env
