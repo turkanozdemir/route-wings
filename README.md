@@ -151,7 +151,7 @@ services:
   api:
     build: ./api
     ports:
-      - "8080:8080"
+      - "8000:8000"
   ui:
     build: ./ui
     ports:
@@ -175,6 +175,6 @@ starting the services:
 ## 🙋 Author
 
 **Türkan Özdemir**  
-📫 [LinkedIn](https://www.linkedin.com/in/turkanozdemir) *(or your real link if you'd like)*
+📫 [LinkedIn](https://www.linkedin.com/in/turkanozdemir)
 
 ---
