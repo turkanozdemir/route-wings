@@ -4,13 +4,17 @@ import com.turkishairlines.technology.dt.route_wings.model.location.Location;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@Table(name = "transportations")
+@Table(name = "transportations",
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"origin_location", "destination_location", "transportation_type"}))
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,5 +37,6 @@ public class Transportation {
 
     @ElementCollection
     @CollectionTable(name = "transportation_operating_days", joinColumns = @JoinColumn(name = "transportation_id"))
+    @NotEmpty
     private Set<@Min(1) @Max(7) Integer> operatingDays;
 }

@@ -1,5 +1,6 @@
 package com.turkishairlines.technology.dt.route_wings.service;
 
+import com.turkishairlines.technology.dt.route_wings.model.location.Location;
 import com.turkishairlines.technology.dt.route_wings.model.transportation.TransportationRequestDTO;
 import com.turkishairlines.technology.dt.route_wings.model.transportation.TransportationResponseDTO;
 
@@ -18,4 +19,6 @@ public interface TransportationService {
     void deleteTransportation(Long id);
 
     boolean isTransportationAvailableOnDate(Long id, LocalDate date);
+
+    boolean isLocationUsed(Location location);
 }

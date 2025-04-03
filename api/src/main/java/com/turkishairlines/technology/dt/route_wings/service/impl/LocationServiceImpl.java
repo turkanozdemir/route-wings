@@ -1,5 +1,6 @@
 package com.turkishairlines.technology.dt.route_wings.service.impl;
 
+import com.turkishairlines.technology.dt.route_wings.constant.ErrorMessages;
 import com.turkishairlines.technology.dt.route_wings.constant.LocationConstants;
 import com.turkishairlines.technology.dt.route_wings.exception.AlreadyExistsException;
 import com.turkishairlines.technology.dt.route_wings.exception.NotFoundException;
@@ -9,11 +10,13 @@ import com.turkishairlines.technology.dt.route_wings.model.location.LocationRequ
 import com.turkishairlines.technology.dt.route_wings.model.location.LocationResponseDTO;
 import com.turkishairlines.technology.dt.route_wings.repository.LocationRepository;
 import com.turkishairlines.technology.dt.route_wings.service.LocationService;
+import com.turkishairlines.technology.dt.route_wings.service.TransportationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
+    private final TransportationService transportationService;
 
     @Override
     public List<LocationResponseDTO> getAllLocations() {
@@ -57,10 +61,18 @@ public class LocationServiceImpl implements LocationService {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
 
-        if (requestDTO.getName() != null) location.setName(requestDTO.getName());
-        if (requestDTO.getCity() != null) location.setCity(requestDTO.getCity());
-        if (requestDTO.getCountry() != null) location.setCountry(requestDTO.getCountry());
-        if (requestDTO.getLocationCode() != null) location.setLocationCode(requestDTO.getLocationCode());
+        if (requestDTO.getName() != null) {
+            Optional<Location> existingLocation = locationRepository.findByName(requestDTO.getName());
+            if (existingLocation.isPresent() && !existingLocation.get().getId().equals(id)) {
+                throw new AlreadyExistsException(LocationConstants.LOCATION, LocationConstants.NAME, requestDTO.getName());
+            }
+            location.setName(requestDTO.getName());
+        }
+        if (requestDTO.getCity() != null && !requestDTO.getCity().isBlank()) location.setCity(requestDTO.getCity());
+        if (requestDTO.getCountry() != null && !requestDTO.getCountry().isBlank())
+            location.setCountry(requestDTO.getCountry());
+        if (requestDTO.getLocationCode() != null && !requestDTO.getLocationCode().isBlank())
+            location.setLocationCode(requestDTO.getLocationCode());
 
         return LocationMapper.toResponseDTO(locationRepository.save(location));
     }
@@ -70,6 +82,16 @@ public class LocationServiceImpl implements LocationService {
         if (!locationRepository.existsById(id)) {
             throw new NotFoundException(LocationConstants.LOCATION, id);
         }
+
+        if (transportationService.isLocationUsed(getLocationEntityById(id))) {
+            throw new IllegalStateException(ErrorMessages.LOCATION_IN_USE_MESSAGE);
+        }
+
         locationRepository.deleteById(id);
+    }
+
+    public Location getLocationEntityById(Long id) {
+        return locationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(LocationConstants.LOCATION, id));
     }
 }
