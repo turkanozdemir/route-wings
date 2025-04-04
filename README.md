@@ -138,7 +138,7 @@ Make sure you have the following installed:
 
 ## 🧪 API Testing
 
-Import the `rt.postman_collection.json` file into Postman to test all available routes.
+Import the `rw.postman_collection.json` file into Postman to test all available routes.
 
 ---
 
